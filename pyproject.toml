@@ -1,0 +1,51 @@
+[tool.poetry]
+name = "cmi-backend"
+version = "0.1.0"
+description = "API-Package for communication with checkmeineimmo.de"
+authors = ["Lorik Bajrami <lorikbajrami25@gmail.com>"]
+readme = "README.md"
+packages = [
+    { include = "app", from="src"}
+]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+fastapi = "^0.115.5"
+sqlalchemy = "2.0.35"
+pydantic = "^2.10.0"
+uvicorn = "^0.32.1"
+gunicorn = "^23.0.0"
+asgi-correlation-id = "^4.3.4"
+prometheus-fastapi-instrumentator = "^7.0.0"
+pydantic-settings = "^2.6.1"
+psycopg2-binary = "^2.9.10"
+opentelemetry-api = "^1.28.2"
+opentelemetry-sdk = "^1.28.2"
+opentelemetry-instrumentation-fastapi = "^0.49b2"
+opentelemetry-instrumentation = "^0.49b2"
+opentelemetry-exporter-otlp = "^1.28.2"
+opentelemetry-instrumentation-sqlalchemy = "^0.49b2"
+opentelemetry-instrumentation-langchain = "^0.33.12"
+langchain = "^0.3.7"
+langchain-community = "^0.3.7"
+langchain-openai = "^0.2.9"
+
+[tool.poetry.group.test.dependencies]
+pytest = "^8.3.3"
+pytest-asyncio = "^0.24.0"
+
+[tool.poetry.group.style.dependencies]
+pyright = "^1.1.389"
+ruff = "^0.8.1"
+
+[tool.poetry.group.dev.dependencies]
+alembic = "^1.14.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.pyright]
+include = ["src"]
+exclude = ["**/.venv", "**/.__pycache__"]
+venv = ".venv"
