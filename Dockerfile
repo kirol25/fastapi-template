@@ -46,6 +46,11 @@ COPY ["main.py", "gunicorn.conf.py", "./"]
 
 # Change to the non-root user
 RUN usermod -u 10001 app || useradd -u 10001 -m app
+
+# Set permissions for the non-root user
+RUN chown -R app:app /app
+
+# Switch to the non-root user
 USER app
 
 # Command to run the application
