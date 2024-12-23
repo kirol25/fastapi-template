@@ -1,5 +1,4 @@
 services:
-
   db:
     image: postgres:latest
     container_name: postgres-db
@@ -15,18 +14,6 @@ services:
     networks:
       - backend-network
 
-  nginx:
-    image: nginx:latest
-    container_name: nginx
-    ports:
-      - "80:80"
-    volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf
-    depends_on:
-      - backend
-    networks:
-      - backend-network
-
   backend:
     image: cmi-backend:latest
     build:
@@ -39,6 +26,18 @@ services:
       - .env
     depends_on:
       - db
+    networks:
+      - backend-network
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - backend
     networks:
       - backend-network
 
@@ -58,7 +57,6 @@ services:
 
 volumes:
   postgres-data:
-
 
 networks:
   backend-network:
