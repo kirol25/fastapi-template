@@ -1,4 +1,4 @@
-from sqlalchemy.orm import Session
+from fastapi import Depends
 
 from app.api.users import schemas
 from app.api.users.repositories import (
@@ -7,8 +7,8 @@ from app.api.users.repositories import (
 
 
 class UserService:
-    def __init__(self, database: Session, language_code: str) -> None:
-        self.repository = UserRepository(database, language_code)
+    def __init__(self, repository: UserRepository = Depends()) -> None:
+        self.repository = repository
 
     def get_user_profile(self, username: str) -> schemas.UserResponse:
         """

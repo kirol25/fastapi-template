@@ -1,21 +1,10 @@
 from fastapi import APIRouter, Depends, status
-from sqlalchemy.orm import Session
 
 from app.api.users import schemas
 from app.api.users.services import UserService
-from app.config import database
-from app.helpers.dependencies import get_language_code
 from app.helpers.schemas import ApiError
 
 router = APIRouter(tags=["User"], prefix="/users")
-
-
-def get_user_service(
-    database: Session = Depends(database.get_session),
-    language_code: str = Depends(get_language_code),
-) -> UserService:
-    """UserService factory"""
-    return UserService(database, language_code)
 
 
 @router.get(
@@ -37,7 +26,7 @@ def get_user_service(
 )
 async def get_user_profile(
     username: str,
-    service: UserService = Depends(get_user_service),
+    service: UserService = Depends(),
 ) -> schemas.UserResponse:
     """
     Retrieve all User information from the database.

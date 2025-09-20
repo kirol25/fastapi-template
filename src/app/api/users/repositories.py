@@ -1,12 +1,14 @@
+from fastapi import Depends
 from sqlalchemy.orm import Session
 
 from app.api.users import models
 from app.helpers.exceptions import UnauthorizedException
 from app.helpers.schemas import ApiError
+from src.app.config.database import get_session
 
 
 class UserRepository:
-    def __init__(self, database: Session, language_code: str) -> None:
+    def __init__(self, database: Session = Depends(get_session)) -> None:
         self.database = database
 
     def create(
