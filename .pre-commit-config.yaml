@@ -1,0 +1,18 @@
+# Pre-commit hooks for openclaw
+# Install: prek install
+# Run manually: prek run --all-files
+#
+# See https://pre-commit.com for more information
+
+repos:
+  # Basic file hygiene
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: trailing-whitespace
+        exclude: '^(docs/|dist/|vendor/|.*\.snap$)'
+      - id: end-of-file-fixer
+        exclude: '^(docs/|dist/|vendor/|.*\.snap$)'
+      - id: check-added-large-files
+        args: [--maxkb=500]
+      - id: check-merge-conflict
