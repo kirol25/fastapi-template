@@ -1,40 +1,52 @@
+from contextlib import asynccontextmanager
+
 import uvicorn
 from fastapi import FastAPI, status
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.gzip import GZipMiddleware
 from prometheus_fastapi_instrumentator import Instrumentator
+from slowapi import _rate_limit_exceeded_handler
+from slowapi.errors import RateLimitExceeded
 
 from app.api.api import router
 from app.api.health.schemas import IndexResponse
 from app.config.application import app_configs, cors_config
-from app.config.middlewares import LogMiddleware
+from app.config.limiter import limiter
+from app.config.middlewares import RequestLoggingMiddleware
+from app.utils.logger import configure_logging
 from app.utils.opentelemetry import init_opentelemetry
 
-# -------------- Start app --------------
+configure_logging()
 
-app = FastAPI(**app_configs)
 
-# -------------- Setup Middlewares  --------------
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """Startup and shutdown logic for the application."""
+    yield
 
-app.add_middleware(LogMiddleware)
 
-# -------------- Setup CORS --------------
+app = FastAPI(**app_configs, lifespan=lifespan)
 
+# Rate limiter
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
+
+# Middleware (order matters: last added = first executed)
+app.add_middleware(GZipMiddleware, minimum_size=1000)
+app.add_middleware(RequestLoggingMiddleware)
 app.add_middleware(CORSMiddleware, **cors_config)
 
-# -------------- API-Router --------------
-
+# Routes
 app.include_router(router)
 
-# -------------- Expose /metrics endpoint  --------------
-
+# Prometheus metrics
 Instrumentator(
     should_group_status_codes=False,
     should_ignore_untemplated=True,
     excluded_handlers=["/monitoring", "/openapi.json", "/docs", "/redoc"],
 ).instrument(app).expose(app, endpoint="/monitoring/metrics", tags=["Monitoring"])
 
-# -------------- Initialize OpenTelemetry --------------
-
+# OpenTelemetry
 init_opentelemetry(app)
 
 
@@ -46,23 +58,12 @@ init_opentelemetry(app)
     tags=["Root"],
 )
 async def index() -> IndexResponse:
-    """
-    Root endpoint of the API.
-
-    This endpoint provides a welcome message to users accessing the APIs root path.
-    It serves as a simple introduction or entry point to the service.
-
-    Returns:
-        dict: A dictionary containing a welcome message.
-    """
+    """Root endpoint of the API."""
     return IndexResponse(message="Hello World!")
 
 
 def main() -> None:
-    """
-    The main function to run the application using Uvicorn.
-    """
-
+    """Run the application using Uvicorn."""
     uvicorn.run("main:app", host="0.0.0.0", port=8080, reload=True, log_config=None)
 
 

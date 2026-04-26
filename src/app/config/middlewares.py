@@ -1,4 +1,5 @@
-import logging
+import asyncio
+import time
 
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.requests import Request
@@ -6,66 +7,46 @@ from starlette.responses import Response
 
 from app.utils.logger import logger
 
+_SKIP_PATHS = {"/", "/monitoring/health", "/monitoring/metrics"}
 
-class LogMiddleware(BaseHTTPMiddleware):
-    """
-    Middleware to log HTTP requests and responses with a unique request ID.
 
-    This middleware generates a unique request ID for each request and logs the incoming request details and response status.
-    """
+class RequestLoggingMiddleware(BaseHTTPMiddleware):
+    """Log every request with method, path, status, and duration."""
 
     async def dispatch(self, request: Request, call_next) -> Response:
-        """
-        Processes an incoming request, logs its details along with the response status, and then returns the response.
+        if request.url.path in _SKIP_PATHS:
+            return await call_next(request)
 
-        Args:
-            request (Request): The incoming HTTP request.
-            call_next (Callable): A function to call the next middleware or endpoint.
+        start = time.perf_counter()
+        status_code = 500
 
-        Returns:
-            Response: The HTTP response generated after processing the request.
-        """
-        response = await call_next(request)
-        client_ip_address = self._get_client_ip_address(request)
+        try:
+            response = await call_next(request)
+            status_code = response.status_code
+        except asyncio.CancelledError:
+            raise
+        finally:
+            duration_ms = round((time.perf_counter() - start) * 1000, 1)
+            log = logger.bind(
+                method=request.method,
+                path=request.url.path,
+                status_code=status_code,
+                duration_ms=duration_ms,
+                client_ip=self._get_client_ip(request),
+            )
+            if status_code >= 500:
+                log.error("request_error")
+            elif status_code >= 400:
+                log.warning("request_warning")
+            else:
+                log.info("request")
 
-        log_level = (
-            logging.DEBUG
-            if request.url.path in ("/", "/health", "/metrics")
-            else logging.INFO
-        )
-        logger.log(
-            log_level,
-            "Incoming request",
-            extra={
-                "request": {
-                    "ip_address": client_ip_address,
-                    "method": request.method,
-                    "url": str(request.url),
-                },
-                "response": {
-                    "status_code": response.status_code,
-                },
-            },
-        )
         return response
 
     @staticmethod
-    def _get_client_ip_address(request: Request) -> str:
-        """
-        Retrieves the client's IP address from the given request.
-
-        Args:
-            request: The request object containing HTTP headers and connection information.
-
-        Returns:
-            str: The client's IP address as a string.
-        """
-        client_ip = request.headers.get("X-Forwarded-For")
-        if client_ip:
-            # X-Forwarded-For could have multiple IPs, the first one is the original client
-            client_ip = client_ip.split(",")[0].strip()
-        else:
-            # Fallback to request.client.host if 'X-Forwarded-For' is not set
-            client_ip = str(request.client.host) if request.client else "unknown"
-
-        return client_ip
+    def _get_client_ip(request: Request) -> str:
+        """Extract client IP from X-Forwarded-For or connection info."""
+        forwarded = request.headers.get("X-Forwarded-For")
+        if forwarded:
+            return forwarded.split(",")[0].strip()
+        return str(request.client.host) if request.client else "unknown"

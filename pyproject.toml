@@ -1,27 +1,40 @@
 [project]
 name = "fastapi-template"
 version = "0.1.0"
-description = "Add your description here"
+description = "A production-ready FastAPI template"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
     "asgi-correlation-id>=4.3.4",
     "fastapi>=0.116.2",
     "gunicorn>=23.0.0",
-    "langchain>=0.3.27",
-    "langchain-community>=0.3.29",
-    "langchain-openai>=0.3.33",
     "opentelemetry-api>=1.37.0",
     "opentelemetry-exporter-otlp>=1.37.0",
     "opentelemetry-instrumentation>=0.58b0",
     "opentelemetry-instrumentation-fastapi>=0.58b0",
-    "opentelemetry-instrumentation-langchain>=0.47.2",
     "opentelemetry-instrumentation-sqlalchemy>=0.58b0",
     "opentelemetry-sdk>=1.37.0",
     "prometheus-fastapi-instrumentator>=7.1.0",
     "psycopg2-binary>=2.9.10",
     "pydantic>=2.11.9",
     "pydantic-settings>=2.10.1",
+    "slowapi>=0.1.9",
     "sqlalchemy>=2.0.43",
+    "structlog>=25.1.0",
     "uvicorn>=0.36.0",
 ]
+
+[dependency-groups]
+dev = [
+    "httpx>=0.28.0",
+    "pytest>=9.0.0",
+    "ruff>=0.11.0",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+addopts = "-v"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/app"]

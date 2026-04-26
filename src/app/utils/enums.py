@@ -1,21 +1,11 @@
 import enum
 
 
-class StrEnum(str, enum.Enum):
-    def __str__(self) -> str:
-        return self.value
-
+class StrEnum(enum.StrEnum):
     @classmethod
     def list_values(cls) -> list[str]:
-        """
-        Returns a list of all values in the enum.
-
-        This method iterates over all enum members and collects their values into a list.
-
-        Returns:
-            list[str]: A list of string values representing all members of the enum.
-        """
-        return [enum.value for enum in cls]
+        """Return a list of all values in the enum."""
+        return [e.value for e in cls]
 
 
 class Environment(StrEnum):

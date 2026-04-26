@@ -2,7 +2,6 @@ from fastapi import FastAPI
 from opentelemetry import trace
 from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
 from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
-from opentelemetry.instrumentation.langchain import LangchainInstrumentor
 from opentelemetry.instrumentation.sqlalchemy import SQLAlchemyInstrumentor
 from opentelemetry.sdk.resources import Resource
 from opentelemetry.sdk.trace import TracerProvider
@@ -36,8 +35,6 @@ def init_opentelemetry(app: FastAPI) -> None:
         tracer_provider=provider,
         excluded_urls="/monitoring/*, ^/$",
     )
-    LangchainInstrumentor().instrument(tracer_provider=provider)
-
     SQLAlchemyInstrumentor().instrument(
         enable_commenter=True, commenter_options={}, engine=engine
     )
