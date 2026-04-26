@@ -1,7 +1,7 @@
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, status
 
 from app.api.users import schemas
-from app.api.users.services import UserService
+from app.api.users.deps import ServiceDep
 from app.helpers.schemas import ApiError
 
 router = APIRouter(tags=["User"], prefix="/users")
@@ -26,7 +26,7 @@ router = APIRouter(tags=["User"], prefix="/users")
 )
 async def get_user_profile(
     username: str,
-    service: UserService = Depends(),
+    service: ServiceDep,
 ) -> schemas.UserResponse:
     """
     Retrieve all User information from the database.

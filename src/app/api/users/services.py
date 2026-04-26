@@ -1,5 +1,3 @@
-from fastapi import Depends
-
 from app.api.users import schemas
 from app.api.users.repositories import (
     UserRepository,
@@ -9,7 +7,7 @@ from app.api.users.repositories import (
 class UserService:
     """Business logic layer for user operations."""
 
-    def __init__(self, repository: UserRepository = Depends()) -> None:
+    def __init__(self, repository: UserRepository) -> None:
         self.repository = repository
 
     def get_user_profile(self, username: str) -> schemas.UserResponse:
