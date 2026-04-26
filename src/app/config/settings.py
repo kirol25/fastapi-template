@@ -25,7 +25,6 @@ class Settings(BaseSettings):
     APP_NAME: str = "fastapi-template"
     ENVIRONMENT: str = Environment.dev
     LOG_LEVEL: str = "INFO"
-    SSE_PING_INTERVAL: int = 2  # seconds
 
     # ====================================
     # OpenTelemetry

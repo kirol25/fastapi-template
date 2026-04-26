@@ -2,7 +2,7 @@ from app.config import settings
 from app.utils.enums import Environment
 from app.version import __version__
 
-_DESCRIPTION = """Entry point for the FastAPI Template project."""
+_DESCRIPTION = """A production-ready FastAPI template with PostgreSQL, SQLAlchemy, Alembic, OpenTelemetry, and more."""
 
 _is_dev = Environment.dev == settings.ENVIRONMENT
 

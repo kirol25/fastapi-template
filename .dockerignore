@@ -1,29 +1,29 @@
-# Byte-compiled / optimized / DLL files
 __pycache__
 .mypy_cache
-**/coverage
+.pytest_cache
+.ruff_cache
 
-**/.git
-**/.gitignore
+.git
 .github
-**/.gitlab
-
-**/.aws
-**/.ssh
+.gitignore
 
 .idea
-**/.vscode
-**/.DS_Store
+.vscode
+.claude
+.DS_Store
 
-**/.env
-**/venv
-**/.venv
-**/env
+.env
+.venv
+venv
+
+tests/
+docs/
+*.md
 
 .dockerignore
-**Dockerfile
+Dockerfile
 docker-compose.yml
 
-**/log.json
-
-**/.temp
+.pre-commit-config.yaml
+ruff.toml
+renovate.json

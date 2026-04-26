@@ -27,11 +27,11 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(**app_configs, lifespan=lifespan)
 
-# Rate limiter
+# --- Rate limiter ---
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
-# Middleware (order matters: last added = first executed)
+# --- Middleware (order matters: last added = first executed) ---
 app.add_middleware(GZipMiddleware, minimum_size=1000)
 app.add_middleware(RequestLoggingMiddleware)
 app.add_middleware(CORSMiddleware, **cors_config)
@@ -39,14 +39,14 @@ app.add_middleware(CORSMiddleware, **cors_config)
 # Routes
 app.include_router(router)
 
-# Prometheus metrics
+# --- Prometheus metrics ---
 Instrumentator(
     should_group_status_codes=False,
     should_ignore_untemplated=True,
     excluded_handlers=["/monitoring", "/openapi.json", "/docs", "/redoc"],
 ).instrument(app).expose(app, endpoint="/monitoring/metrics", tags=["Monitoring"])
 
-# OpenTelemetry
+# --- OpenTelemetry ---
 init_opentelemetry(app)
 
 
