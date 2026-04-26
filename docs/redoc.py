@@ -1,6 +1,6 @@
-"""
-Script to export the ReDoc documentation page into a standalone HTML file.
-Created by https://github.com/pawamoy on https://github.com/Redocly/redoc/issues/726#issuecomment-645414239
+"""Export the ReDoc documentation page into a standalone HTML file.
+
+Based on https://github.com/Redocly/redoc/issues/726#issuecomment-645414239
 """
 
 import json
@@ -11,7 +11,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
 <html>
 <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-    <title>My Project - ReDoc</title>
+    <title>API Documentation - ReDoc</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" href="https://fastapi.tiangolo.com/img/favicon.png">
@@ -35,13 +35,8 @@ HTML_TEMPLATE = """<!DOCTYPE html>
 """
 
 
-def main(output_file="api-docs-my-project.html"):
-    """
-    Export the ReDoc documentation as a standalone HTML file.
-
-    Args:
-        output_file (str): The path to the output HTML file. Defaults to "api-docs-my-project.html".
-    """
+def main(output_file: str = "api-docs.html") -> None:
+    """Export the ReDoc documentation as a standalone HTML file."""
     spec = app.openapi()
     html_content = HTML_TEMPLATE % json.dumps(spec)
     with open(output_file, "w") as file:

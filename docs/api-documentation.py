@@ -1,3 +1,5 @@
+"""Extract the OpenAPI spec from a FastAPI application and write it to a file."""
+
 import argparse
 import json
 import sys
@@ -6,13 +8,8 @@ import yaml
 from uvicorn.importer import import_from_string
 
 
-def parse_args():
-    """
-    Parse command-line arguments.
-
-    Returns:
-        argparse.Namespace: The parsed arguments.
-    """
+def parse_args() -> argparse.Namespace:
+    """Parse command-line arguments."""
     parser = argparse.ArgumentParser(prog="extract-openapi.py")
     parser.add_argument(
         "app", help='App import string. Example: "main:app"', default="main:app"
@@ -24,10 +21,8 @@ def parse_args():
     return parser.parse_args()
 
 
-def main():
-    """
-    Main function to extract OpenAPI spec from a FastAPI application and write it to a file.
-    """
+def main() -> None:
+    """Extract OpenAPI spec from a FastAPI application and write it to a file."""
     args = parse_args()
 
     if args.app_dir is not None:
