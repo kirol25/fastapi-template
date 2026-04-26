@@ -1,5 +1,4 @@
 import uuid
-
 from unittest.mock import MagicMock
 
 from app.api.users.models import User

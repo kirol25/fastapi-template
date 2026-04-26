@@ -4,7 +4,6 @@ from unittest.mock import MagicMock
 from fastapi.testclient import TestClient
 
 from app.api.users.deps import get_service
-from app.api.users.models import User
 from app.api.users.services import UserService
 from app.main import app
 
