@@ -6,6 +6,8 @@ from app.utils.enums import Environment
 
 
 class Settings(BaseSettings):
+    """Application settings loaded from environment variables."""
+
     # ====================================
     # Database
     # ====================================
@@ -20,8 +22,7 @@ class Settings(BaseSettings):
     # General
     # ====================================
 
-    APP_NAME: str = "cmi-backend"
-    DEFAULT_LANGUAGE_HEADER_CODE: str = "de-DE"
+    APP_NAME: str = "fastapi-template"
     ENVIRONMENT: str = Environment.dev
     LOG_LEVEL: str = "INFO"
     SSE_PING_INTERVAL: int = 2  # seconds

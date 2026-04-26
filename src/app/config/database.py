@@ -17,9 +17,8 @@ engine = create_engine(SQLALCHEMY_DATABASE_URL, connect_args=connect_args)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 
-# declarative base class
 class Base(DeclarativeBase):
-    pass
+    """Declarative base class for all SQLAlchemy models."""
 
 
 def get_session() -> Iterator[Session]:

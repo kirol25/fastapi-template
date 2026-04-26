@@ -56,10 +56,10 @@ class JsonFormatter(Formatter):
     This formatter serializes log records into JSON, including request and response information if available.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
-    def format(self, record):
+    def format(self, record: logging.LogRecord) -> str:
         """
         Formats a log record into a JSON string.
 
@@ -103,7 +103,7 @@ class JsonFormatter(Formatter):
         return json.dumps(json_record)
 
     @staticmethod
-    def _serialize_value(value):
+    def _serialize_value(value: object) -> str:
         """
         Ensures that the value is JSON serializable.
 

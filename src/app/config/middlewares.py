@@ -1,6 +1,8 @@
 import logging
 
 from starlette.middleware.base import BaseHTTPMiddleware
+from starlette.requests import Request
+from starlette.responses import Response
 
 from app.utils.logger import logger
 
@@ -12,7 +14,7 @@ class LogMiddleware(BaseHTTPMiddleware):
     This middleware generates a unique request ID for each request and logs the incoming request details and response status.
     """
 
-    async def dispatch(self, request, call_next):
+    async def dispatch(self, request: Request, call_next) -> Response:
         """
         Processes an incoming request, logs its details along with the response status, and then returns the response.
 
@@ -48,7 +50,7 @@ class LogMiddleware(BaseHTTPMiddleware):
         return response
 
     @staticmethod
-    def _get_client_ip_address(request) -> str:
+    def _get_client_ip_address(request: Request) -> str:
         """
         Retrieves the client's IP address from the given request.
 

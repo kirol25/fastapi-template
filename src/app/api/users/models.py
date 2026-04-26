@@ -9,6 +9,8 @@ from app.config.database import Base
 
 
 class User(Base):
+    """SQLAlchemy model for the users table."""
+
     __tablename__ = "users"
 
     id: Mapped[uuid.UUID] = mapped_column(

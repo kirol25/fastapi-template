@@ -1,28 +1,24 @@
 ## BASE STAGE ##
-FROM python:3.11-slim as base
+FROM python:3.13-slim as base
 
 WORKDIR /app
 
 # Environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
-# Ignore 'Running pip as the root user...' warning
-ENV PIP_ROOT_USER_ACTION=ignore
-
-RUN pip install --upgrade pip
 
 ## BUILDER STAGE ##
 FROM base as builder
 
-# Install Poetry
-RUN pip install poetry==1.8.3
+# Install uv
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
 # Copy project files
-COPY ["pyproject.toml", "poetry.lock", "README.md", "./"]
+COPY ["pyproject.toml", "uv.lock", "README.md", "./"]
 COPY ["src/", "src/"]
 
 # Build wheel
-RUN poetry build --format wheel
+RUN uv build --wheel
 
 ## PRODUCTION STAGE ##
 FROM base as production

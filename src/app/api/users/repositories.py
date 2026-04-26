@@ -8,6 +8,8 @@ from src.app.config.database import get_session
 
 
 class UserRepository:
+    """Data access layer for user operations."""
+
     def __init__(self, database: Session = Depends(get_session)) -> None:
         self.database = database
 

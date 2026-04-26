@@ -7,6 +7,8 @@ from app.api.users.repositories import (
 
 
 class UserService:
+    """Business logic layer for user operations."""
+
     def __init__(self, repository: UserRepository = Depends()) -> None:
         self.repository = repository
 
@@ -16,7 +18,6 @@ class UserService:
 
         Args:
             username (str): The extracted username from the Access Token.
-            language_code (str): Extracted language code from Header request.
 
         Returns:
             UserResponse: The user data with all information related to that user.

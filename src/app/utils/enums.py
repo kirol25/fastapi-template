@@ -2,7 +2,7 @@ import enum
 
 
 class StrEnum(str, enum.Enum):
-    def __str__(self):
+    def __str__(self) -> str:
         return self.value
 
     @classmethod
@@ -19,16 +19,19 @@ class StrEnum(str, enum.Enum):
 
 
 class Environment(StrEnum):
+    """Application deployment environments."""
     dev = "dev"
     sandbox = "sandbox"
 
 
 class SentByEnum(StrEnum):
+    """Identifies the sender of a message."""
     client = "client"
     server = "server"
 
 
 class MessageTypeEnum(StrEnum):
+    """Types of messages in the system."""
     text = "text"
     status = "status"
     result = "result"
