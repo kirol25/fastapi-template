@@ -12,4 +12,5 @@ class Environment(StrEnum):
     """Application deployment environments."""
 
     dev = "dev"
-    sandbox = "sandbox"
+    qa = "qa"
+    prod = "prod"

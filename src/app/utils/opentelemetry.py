@@ -9,7 +9,6 @@ from opentelemetry.sdk.trace.export import BatchSpanProcessor
 
 from app.config import settings
 from app.config.database import engine
-from app.utils.enums import Environment
 
 
 def init_opentelemetry(app: FastAPI) -> None:
@@ -53,10 +52,6 @@ def _get_resources() -> Resource:
     Raises:
         Exception: If the environment does not exist.
     """
-    if settings.ENVIRONMENT not in Environment.list_values():
-        raise Exception(
-            f"The provided Environment {settings.ENVIRONMENT} is not known!"
-        )
     return Resource(
         attributes={"service.name": f"{settings.ENVIRONMENT}-{settings.APP_NAME}"}
     )
