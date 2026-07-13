@@ -21,14 +21,14 @@ dependencies = [
     "slowapi>=0.1.10",
     "sqlalchemy>=2.0.51",
     "structlog>=25.5.0",
-    "uvicorn>=0.50.0",
+    "uvicorn>=0.51.0",
 ]
 
 [dependency-groups]
 dev = [
     "httpx>=0.28.1",
     "pytest>=9.1.1",
-    "ruff>=0.15.20",
+    "ruff>=0.15.21",
 ]
 
 [tool.pytest.ini_options]
