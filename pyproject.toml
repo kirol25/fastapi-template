@@ -15,20 +15,20 @@ dependencies = [
     "opentelemetry-instrumentation-sqlalchemy>=0.65b0",
     "opentelemetry-sdk>=1.44.0",
     "prometheus-fastapi-instrumentator>=7.1.0",
-    "psycopg2-binary>=2.9.12",
-    "pydantic>=2.13.4",
-    "pydantic-settings>=2.14.2",
+    "psycopg2-binary>=2.9.13",
+    "pydantic>=2.13.5",
+    "pydantic-settings>=2.15.0",
     "slowapi>=0.1.10",
-    "sqlalchemy>=2.0.51",
+    "sqlalchemy>=2.0.52",
     "structlog>=25.5.0",
-    "uvicorn>=0.52.0",
+    "uvicorn>=0.52.4",
 ]
 
 [dependency-groups]
 dev = [
     "httpx>=0.28.1",
     "pytest>=9.1.1",
-    "ruff>=0.16.1",
+    "ruff>=0.16.7",
 ]
 
 [tool.pytest.ini_options]
